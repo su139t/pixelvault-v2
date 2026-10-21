@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PixelVault
 
-## Getting Started
+PixelVault is a private image vault built with Next.js. Sign in with Telegram,
+upload images to your Telegram Saved Messages, and browse your image library
+from a dashboard. Image metadata and account data are stored in MongoDB.
 
-First, run the development server:
+## Features
+
+- Telegram sign-in with a phone verification code or QR code
+- Upload JPEG, PNG, WebP, and GIF images up to 10 MB
+- Store uploaded images in the signed-in user's Telegram Saved Messages
+- Browse, search, and preview images in the dashboard
+- Display and cache the user's Telegram profile photo
+- Store image and account metadata in MongoDB
+
+## Requirements
+
+- Node.js and npm
+- A MongoDB database reachable from the app
+- Telegram API credentials from [my.telegram.org](https://my.telegram.org)
+- A Telegram account for signing in and storing images
+
+## Local setup
+
+1. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+2. Copy the example environment file and fill in your own values:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000).
+
+## Environment variables
+
+| Variable | Description |
+| --- | --- |
+| `MONGODB_URI` | MongoDB connection string. Ensure the database allows connections from the app's network. |
+| `TELEGRAM_API_ID` | Telegram API ID from `my.telegram.org`. |
+| `TELEGRAM_API_HASH` | Telegram API hash from `my.telegram.org`. Keep it private. |
+| `TELEGRAM_SESSION_ENCRYPTION_KEY` | 32-byte encryption key encoded as 64 hexadecimal characters. Used to encrypt stored Telegram sessions. |
+
+Generate an encryption key with:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+openssl rand -hex 32
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Never commit `.env` or place real credentials in `.env.example`. For Vercel,
+configure the same variables in the project's Environment Variables settings,
+then redeploy. Use the same encryption key across deployments so existing
+Telegram sessions remain decryptable.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev    # Start the development server
+npm run lint   # Run ESLint
+npm run build  # Build the production app
+npm run start  # Start the production server
+```
 
-## Learn More
+## Deployment notes
 
-To learn more about Next.js, take a look at the following resources:
+The project can be deployed to Vercel. Configure all required environment
+variables and make sure MongoDB network access permits connections from the
+deployment. Image uploads require the Telegram session created by signing in.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The current Telegram QR sign-in flow keeps its temporary login state in server
+process memory. Serverless deployments may route requests to different
+instances, which can interrupt QR sign-in; use a long-running Node.js host or
+durable shared coordination for reliable QR sign-in in that environment.
