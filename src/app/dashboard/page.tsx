@@ -87,6 +87,7 @@ function formatDate(dateStr: string): string {
 export default function DashboardPage() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
+  const [profilePhotoAvailable, setProfilePhotoAvailable] = useState(true);
   const [images, setImages] = useState<ImageItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -125,6 +126,7 @@ export default function DashboardPage() {
 
         if (isMounted) {
           setCurrentUser(meData.user);
+          setProfilePhotoAvailable(true);
         }
 
         const imagesRes = await fetch("/api/images", { cache: "no-store" });
@@ -362,9 +364,21 @@ export default function DashboardPage() {
         <div className="mt-auto space-y-1">
           {currentUser && (
             <div className="mb-3 flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50 p-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-600 text-xs font-bold text-white uppercase">
-                {currentUser.name.charAt(0)}
-              </div>
+              {profilePhotoAvailable ? (
+                <Image
+                  src="/api/auth/profile-photo"
+                  alt=""
+                  width={36}
+                  height={36}
+                  unoptimized
+                  onError={() => setProfilePhotoAvailable(false)}
+                  className="h-9 w-9 shrink-0 rounded-full object-cover"
+                />
+              ) : (
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-xs font-bold uppercase text-white">
+                  {currentUser.name.charAt(0)}
+                </div>
+              )}
               <div className="min-w-0 flex-1">
                 <p className="truncate text-xs font-semibold text-slate-800">
                   {currentUser.name}

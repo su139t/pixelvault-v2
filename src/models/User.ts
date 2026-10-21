@@ -31,6 +31,17 @@ const UserSchema = new Schema(
       default: null,
       select: false,
     },
+    profilePhotoData: {
+      type: Buffer,
+      default: null,
+      select: false,
+    },
+    profilePhotoMimeType: {
+      type: String,
+      enum: ["image/jpeg", "image/png", "image/webp", "image/gif"],
+      default: null,
+      select: false,
+    },
   },
   {
     timestamps: true,

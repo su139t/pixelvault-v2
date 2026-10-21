@@ -60,6 +60,50 @@ export function detectImageMimeType(
   return null;
 }
 
+export async function downloadTelegramProfilePhoto(params: {
+  encryptedSession: string;
+}): Promise<{
+  buffer: Buffer;
+  mimeType: "image/jpeg" | "image/png" | "image/webp" | "image/gif";
+} | null> {
+  const { apiId, apiHash } = getTelegramConfig();
+  const sessionString = decryptTelegramSession(params.encryptedSession);
+  const client = new TelegramClient(
+    new StringSession(sessionString),
+    apiId,
+    apiHash,
+    { connectionRetries: 3 },
+  );
+
+  try {
+    await client.connect();
+
+    if (!(await client.checkAuthorization())) {
+      throw new Error("Telegram session is expired or invalid.");
+    }
+
+    const downloaded = await client.downloadProfilePhoto("me", {
+      isBig: false,
+    });
+
+    if (!downloaded) return null;
+
+    const buffer = Buffer.isBuffer(downloaded)
+      ? downloaded
+      : Buffer.from(downloaded);
+    if (buffer.length === 0) return null;
+
+    const mimeType = detectImageMimeType(buffer);
+    if (!mimeType) {
+      throw new Error("Telegram returned an unsupported profile photo format.");
+    }
+
+    return { buffer, mimeType };
+  } finally {
+    await client.disconnect().catch(() => {});
+  }
+}
+
 /**
  * Uploads an image buffer to the authenticated user's Telegram Saved Messages ("me").
  * Adds the unique PixelVault identifier as the message caption.
