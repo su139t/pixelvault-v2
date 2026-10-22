@@ -12,7 +12,7 @@ import AIMetadata from "@/models/AIMetadata";
 import Image from "@/models/Image";
 import User from "@/models/User";
 
-const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
+const MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024; // 50MB
 
 export async function POST(request: Request) {
   try {
@@ -68,7 +68,7 @@ export async function POST(request: Request) {
 
     if (file.size > MAX_FILE_SIZE_BYTES) {
       return NextResponse.json(
-        { error: "File exceeds the 10MB limit" },
+        { error: "File exceeds the 50MB limit" },
         { status: 400 },
       );
     }

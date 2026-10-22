@@ -23,6 +23,7 @@ import {
   X,
   Download,
   AlertCircle,
+  Delete,
   Loader2,
   CheckCircle2,
   ShieldCheck,
@@ -355,9 +356,8 @@ export default function DashboardPage() {
 
       {/* Sidebar Navigation */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-[260px] flex-col border-r border-slate-200 bg-white px-5 py-6 transition-transform lg:translate-x-0 ${
-          mobileMenu ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed inset-y-0 left-0 z-50 flex w-[260px] flex-col border-r border-slate-200 bg-white px-5 py-6 transition-transform lg:translate-x-0 ${mobileMenu ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="mb-8 flex items-center justify-between px-1">
           <div className="flex items-center gap-3">
@@ -392,11 +392,10 @@ export default function DashboardPage() {
                 setActiveTab(label);
                 setMobileMenu(false);
               }}
-              className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${
-                activeTab === label
+              className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${activeTab === label
                   ? "bg-indigo-50 text-indigo-700"
                   : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+                }`}
             >
               <Icon size={19} />
               {label}
@@ -616,11 +615,10 @@ export default function DashboardPage() {
                     <button
                       key={tag}
                       onClick={() => setSelectedTag(tag)}
-                      className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${
-                        selectedTag === tag
+                      className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${selectedTag === tag
                           ? "bg-slate-900 text-white"
                           : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
-                      }`}
+                        }`}
                     >
                       {tag}
                     </button>
@@ -631,22 +629,20 @@ export default function DashboardPage() {
                   <button
                     onClick={() => setView("grid")}
                     aria-label="Grid view"
-                    className={`rounded-md p-1.5 ${
-                      view === "grid"
+                    className={`rounded-md p-1.5 ${view === "grid"
                         ? "bg-indigo-50 text-indigo-700"
                         : "text-slate-400"
-                    }`}
+                      }`}
                   >
                     <Grid2X2 size={17} />
                   </button>
                   <button
                     onClick={() => setView("list")}
                     aria-label="List view"
-                    className={`rounded-md p-1.5 ${
-                      view === "list"
+                    className={`rounded-md p-1.5 ${view === "list"
                         ? "bg-indigo-50 text-indigo-700"
                         : "text-slate-400"
-                    }`}
+                      }`}
                   >
                     <List size={17} />
                   </button>
@@ -712,17 +708,15 @@ export default function DashboardPage() {
                 {filteredImages.map((image) => (
                   <article
                     key={image.id}
-                    className={`group overflow-hidden rounded-2xl border border-slate-200/80 bg-white transition duration-200 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-xl hover:shadow-slate-200/60 cursor-pointer ${
-                      view === "list" ? "flex items-center p-3" : ""
-                    }`}
+                    className={`group overflow-hidden rounded-2xl border border-slate-200/80 bg-white transition duration-200 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-xl hover:shadow-slate-200/60 cursor-pointer ${view === "list" ? "flex items-center p-3" : ""
+                      }`}
                     onClick={() => setSelectedImage(image)}
                   >
                     <div
-                      className={`relative overflow-hidden bg-slate-100 ${
-                        view === "list"
+                      className={`relative overflow-hidden bg-slate-100 ${view === "list"
                           ? "h-20 w-24 shrink-0 rounded-xl"
                           : "aspect-[4/3]"
-                      }`}
+                        }`}
                     >
                       <Image
                         src={`/api/images/${image.id}/file`}
@@ -757,9 +751,8 @@ export default function DashboardPage() {
                     </div>
 
                     <div
-                      className={`flex items-center justify-between gap-3 ${
-                        view === "list" ? "min-w-0 flex-1 px-4" : "p-4"
-                      }`}
+                      className={`flex items-center justify-between gap-3 ${view === "list" ? "min-w-0 flex-1 px-4" : "p-4"
+                        }`}
                     >
                       <div className="min-w-0">
                         <h4 className="truncate text-sm font-semibold text-slate-800">

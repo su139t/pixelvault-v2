@@ -9,7 +9,9 @@ function getTelegramConfig() {
   const apiHash = process.env.TELEGRAM_API_HASH;
 
   if (!Number.isSafeInteger(apiId) || apiId <= 0 || !apiHash) {
-    throw new Error("Telegram API configuration (TELEGRAM_API_ID / TELEGRAM_API_HASH) is missing.");
+    throw new Error(
+      "Telegram API configuration (TELEGRAM_API_ID / TELEGRAM_API_HASH) is missing.",
+    );
   }
 
   return { apiId, apiHash };
@@ -166,7 +168,9 @@ export async function uploadImageToTelegramSavedMessages(params: {
 
     const isAuthorized = await client.checkAuthorization();
     if (!isAuthorized) {
-      throw new Error("Telegram session is expired or invalid. Please log in again.");
+      throw new Error(
+        "Telegram session is expired or invalid. Please log in again.",
+      );
     }
 
     const customFile = new CustomFile(
@@ -179,10 +183,13 @@ export async function uploadImageToTelegramSavedMessages(params: {
     const message = await client.sendFile("me", {
       file: customFile,
       caption: params.caption,
+      forceDocument: true,
     });
 
     if (!message || !message.id) {
-      throw new Error("Telegram did not return a message ID for the uploaded media.");
+      throw new Error(
+        "Telegram did not return a message ID for the uploaded media.",
+      );
     }
 
     return message.id.toString();
