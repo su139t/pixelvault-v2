@@ -17,6 +17,13 @@ const ImageSchema = new Schema(
       index: true,
     },
 
+    caption: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 255,
+    },
+
     originalName: {
       type: String,
       required: true,

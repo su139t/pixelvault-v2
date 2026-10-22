@@ -36,6 +36,7 @@ export async function GET() {
     const results = images.map((image) => ({
       id: image._id.toString(),
       uniqueId: image.uniqueId,
+      caption: image.caption ?? image.uniqueId,
       originalName: image.originalName,
       mimeType: image.mimeType,
       sizeBytes: image.sizeBytes,

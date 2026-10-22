@@ -90,6 +90,7 @@ export async function POST(request: Request) {
     const fileName =
       file instanceof File && file.name ? file.name.trim() : "unnamed-image";
     const uniqueId = `PIXELVAULT_${randomUUID()}`;
+    const caption = uniqueId;
 
     let telegramMessageId: string;
     try {
@@ -97,7 +98,7 @@ export async function POST(request: Request) {
         encryptedSession: userDoc.telegramSessionEncrypted,
         buffer,
         fileName,
-        caption: uniqueId,
+        caption,
       });
     } catch (uploadError) {
       console.error(
@@ -118,6 +119,7 @@ export async function POST(request: Request) {
       const newImage = await Image.create({
         userId: userDoc._id,
         uniqueId,
+        caption,
         originalName: fileName.slice(0, 255),
         mimeType: detectedMime,
         sizeBytes: buffer.length,
@@ -145,6 +147,7 @@ export async function POST(request: Request) {
           image: {
             id: newImage._id.toString(),
             uniqueId: newImage.uniqueId,
+            caption: newImage.caption,
             originalName: newImage.originalName,
             mimeType: newImage.mimeType,
             sizeBytes: newImage.sizeBytes,

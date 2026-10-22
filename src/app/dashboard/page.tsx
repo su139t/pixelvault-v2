@@ -31,6 +31,7 @@ import {
 export type ImageItem = {
   id: string;
   uniqueId: string;
+  caption: string;
   originalName: string;
   mimeType: string;
   sizeBytes: number;
