@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { getAuthenticatedUser } from "@/lib/auth";
-import { downloadTelegramProfilePhoto } from "@/lib/telegram-storage";
+import { downloadTelegramProfilePhoto } from "@/lib/telegram/storage";
 import User from "@/models/User";
 
 export async function GET() {

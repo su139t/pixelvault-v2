@@ -4,7 +4,7 @@ import { TelegramClient } from "teleproto";
 import { StringSession } from "teleproto/sessions";
 
 import connectDB from "@/lib/mongodb";
-import { encryptTelegramSession } from "@/lib/telegram-session";
+import { encryptTelegramSession } from "@/lib/telegram/session";
 import PendingTelegramAuth from "@/models/PendingTelegramAuth";
 
 export async function POST(request: Request) {

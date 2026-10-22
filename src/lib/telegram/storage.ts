@@ -2,7 +2,7 @@ import { Api, TelegramClient } from "teleproto";
 import { StringSession } from "teleproto/sessions";
 import { CustomFile } from "teleproto/client/uploads";
 
-import { decryptTelegramSession } from "@/lib/telegram-session";
+import { decryptTelegramSession } from "@/lib/telegram/session";
 
 function getTelegramConfig() {
   const apiId = Number(process.env.TELEGRAM_API_ID);

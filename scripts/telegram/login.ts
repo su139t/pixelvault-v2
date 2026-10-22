@@ -8,7 +8,7 @@ import { StringSession } from "teleproto/sessions";
 
 import connectDB from "@/lib/mongodb";
 import User from "@/models/User";
-import { encryptTelegramSession } from "@/lib/telegram-session";
+import { encryptTelegramSession } from "@/lib/telegram/session";
 
 async function main() {
   const rl = createInterface({ input: stdin, output: stdout });

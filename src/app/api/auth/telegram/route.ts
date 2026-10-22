@@ -6,7 +6,7 @@ import {
   startQrLogin,
   submitCode,
   submitPassword,
-} from "@/lib/telegram-auth-flow";
+} from "@/lib/telegram/auth-flow";
 
 
 export async function POST(request: Request) {

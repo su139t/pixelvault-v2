@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 import { getAuthenticatedUser } from "@/lib/auth";
 import connectDB from "@/lib/mongodb";
-import { downloadImageFromTelegram } from "@/lib/telegram-storage";
+import { downloadImageFromTelegram } from "@/lib/telegram/storage";
 import Image from "@/models/Image";
 import User from "@/models/User";
 

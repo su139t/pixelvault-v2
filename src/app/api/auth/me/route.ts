@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 import connectDB from "@/lib/mongodb";
-import { isTelegramSessionAuthorized } from "@/lib/telegram-storage";
+import { isTelegramSessionAuthorized } from "@/lib/telegram/storage";
 import User from "@/models/User";
 import {
   revokeWebSession,

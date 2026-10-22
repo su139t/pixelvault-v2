@@ -7,7 +7,7 @@ import connectDB from "@/lib/mongodb";
 import {
   decryptTelegramSession,
   encryptTelegramSession,
-} from "@/lib/telegram-session";
+} from "@/lib/telegram/session";
 import { createWebSession } from "@/lib/web-session";
 import PendingTelegramAuth from "@/models/PendingTelegramAuth";
 import User from "@/models/User";

@@ -7,7 +7,7 @@ import {
   deleteTelegramMessage,
   detectImageMimeType,
   uploadImageToTelegramSavedMessages,
-} from "@/lib/telegram-storage";
+} from "@/lib/telegram/storage";
 import AIMetadata from "@/models/AIMetadata";
 import Image from "@/models/Image";
 import User from "@/models/User";

@@ -43,6 +43,21 @@ from a dashboard. Image metadata and account data are stored in MongoDB.
 
 4. Open [http://localhost:3000](http://localhost:3000).
 
+## Project structure
+
+```text
+src/
+  app/                Next.js pages and API route handlers
+  lib/
+    telegram/         Telegram auth, session encryption, and storage services
+    auth.ts           Website session and authenticated-user helpers
+    mongodb.ts        MongoDB connection
+  models/             Mongoose schemas
+scripts/
+  telegram/           Telegram login and session maintenance utilities
+  tests/              Manual upload workflow checks
+```
+
 ## Environment variables
 
 | Variable | Description |

@@ -5,7 +5,7 @@ import { TelegramClient } from "teleproto";
 import { StringSession } from "teleproto/sessions";
 import { createInterface } from "node:readline/promises";
 import { stdin, stdout } from "node:process";
-import { decryptTelegramSession } from "@/lib/telegram-session";
+import { decryptTelegramSession } from "@/lib/telegram/session";
 
 async function main() {
   const apiId = Number(process.env.TELEGRAM_API_ID);

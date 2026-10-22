@@ -3,7 +3,7 @@ import { TelegramClient } from "teleproto";
 import { StringSession } from "teleproto/sessions";
 
 import connectDB from "@/lib/mongodb";
-import { encryptTelegramSession } from "@/lib/telegram-session";
+import { encryptTelegramSession } from "@/lib/telegram/session";
 import { createWebSession } from "@/lib/web-session";
 import User from "@/models/User";
 
