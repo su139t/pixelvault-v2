@@ -160,6 +160,26 @@ export default function DashboardPage() {
     };
   }, [router]);
 
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const response = await fetch("/api/auth/me", { cache: "no-store" });
+        if (!response.ok) return;
+
+        const data = await response.json();
+        if (!data.user) {
+          router.replace("/login");
+        }
+      } catch {
+        // Keep the current session on temporary network errors.
+      }
+    }, 30_000);
+
+    return () => clearInterval(interval);
+  }, [currentUser, router]);
+
   // Real upload handler connecting to POST /api/images/upload
   async function handleUpload(files: FileList | null) {
     if (!files || files.length === 0) return;

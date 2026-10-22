@@ -1,4 +1,4 @@
-import { TelegramClient } from "teleproto";
+import { Api, TelegramClient } from "teleproto";
 import { StringSession } from "teleproto/sessions";
 import { CustomFile } from "teleproto/client/uploads";
 
@@ -13,6 +13,43 @@ function getTelegramConfig() {
   }
 
   return { apiId, apiHash };
+}
+
+export async function isTelegramSessionAuthorized(
+  encryptedSession: string,
+): Promise<boolean> {
+  const { apiId, apiHash } = getTelegramConfig();
+  const sessionString = decryptTelegramSession(encryptedSession);
+  const client = new TelegramClient(
+    new StringSession(sessionString),
+    apiId,
+    apiHash,
+    { connectionRetries: 3 },
+  );
+
+  try {
+    await client.connect();
+    await client.invoke(new Api.updates.GetState());
+    return true;
+  } catch (error) {
+    const telegramError = error as {
+      errorMessage?: string;
+      message?: string;
+    };
+    const message = `${telegramError.errorMessage ?? ""} ${telegramError.message ?? ""}`;
+
+    if (
+      /AUTH_KEY_(?:UNREGISTERED|INVALID|PERM_EMPTY)|SESSION_REVOKED|USER_DEACTIVATED|USER_DEACTIVATED_BAN/i.test(
+        message,
+      )
+    ) {
+      return false;
+    }
+
+    throw error;
+  } finally {
+    await client.disconnect().catch(() => {});
+  }
 }
 
 /**

@@ -11,6 +11,7 @@ from a dashboard. Image metadata and account data are stored in MongoDB.
 - Store uploaded images in the signed-in user's Telegram Saved Messages
 - Browse, search, and preview images in the dashboard
 - Display and cache the user's Telegram profile photo
+- Automatically sign out when the Telegram session is revoked
 - Store image and account metadata in MongoDB
 
 ## Requirements

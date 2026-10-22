@@ -53,3 +53,7 @@ export async function revokeWebSession(token: string) {
     tokenHash: hashToken(token),
   });
 }
+
+export async function revokeWebSessionsForUser(userId: Types.ObjectId) {
+  await WebSession.deleteMany({ userId });
+}

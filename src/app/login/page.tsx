@@ -14,6 +14,18 @@ type Stage =
     | "completed"
     | "failed";
 
+function LoadingIndicator({ label }: { label: string }) {
+    return (
+        <span role="status" aria-live="polite" className="inline-flex items-center justify-center gap-2">
+            <span
+                aria-hidden="true"
+                className="h-4 w-4 animate-spin rounded-full border-2 border-current border-r-transparent"
+            />
+            <span>{label}</span>
+        </span>
+    );
+}
+
 export default function LoginPage() {
     const router = useRouter();
 
@@ -254,9 +266,13 @@ export default function LoginPage() {
                                 />
                                 <button
                                     disabled={busy}
-                                    className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold disabled:opacity-50"
+                                    className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold disabled:cursor-wait disabled:opacity-50"
                                 >
-                                    {busy ? "Please wait..." : "Send Telegram code"}
+                                    {busy ? (
+                                        <LoadingIndicator label="Sending Telegram code..." />
+                                    ) : (
+                                        "Send Telegram code"
+                                    )}
                                 </button>
                             </form>
                         ) : (
@@ -265,9 +281,13 @@ export default function LoginPage() {
                                     type="button"
                                     onClick={startQr}
                                     disabled={busy}
-                                    className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold disabled:opacity-50"
+                                    className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold disabled:cursor-wait disabled:opacity-50"
                                 >
-                                    {busy ? "Preparing QR code..." : "Generate QR code"}
+                                    {busy ? (
+                                        <LoadingIndicator label="Connecting to Telegram..." />
+                                    ) : (
+                                        "Generate QR code"
+                                    )}
                                 </button>
                             </div>
                         )}
@@ -291,9 +311,13 @@ export default function LoginPage() {
                                 />
                                 <button
                                     disabled={busy}
-                                    className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold disabled:opacity-50"
+                                    className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold disabled:cursor-wait disabled:opacity-50"
                                 >
-                                    Verify code
+                                    {busy ? (
+                                        <LoadingIndicator label="Verifying code..." />
+                                    ) : (
+                                        "Verify code"
+                                    )}
                                 </button>
                             </form>
                         )}
@@ -315,9 +339,13 @@ export default function LoginPage() {
                                 />
                                 <button
                                     disabled={busy}
-                                    className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold disabled:opacity-50"
+                                    className="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold disabled:cursor-wait disabled:opacity-50"
                                 >
-                                    Verify password
+                                    {busy ? (
+                                        <LoadingIndicator label="Verifying password..." />
+                                    ) : (
+                                        "Verify password"
+                                    )}
                                 </button>
                             </form>
                         )}
@@ -333,15 +361,22 @@ export default function LoginPage() {
                                     Telegram app → Settings → Devices → Link Desktop Device.
                                     Scan this QR code.
                                 </p>
+                                <div className="mt-4 text-sm text-gray-300">
+                                    <LoadingIndicator label="Waiting for you to scan..." />
+                                </div>
                             </div>
                         )}
 
                         {(stage === "starting" || stage === "verifying") && (
-                            <p className="text-center text-sm text-gray-300">
-                                {stage === "starting"
-                                    ? "Connecting to Telegram..."
-                                    : "Verifying your login..."}
-                            </p>
+                            <div className="text-center text-sm text-gray-300">
+                                <LoadingIndicator
+                                    label={
+                                        stage === "starting"
+                                            ? "Connecting to Telegram..."
+                                            : "Verifying your login..."
+                                    }
+                                />
+                            </div>
                         )}
 
                         {stage === "failed" && (
