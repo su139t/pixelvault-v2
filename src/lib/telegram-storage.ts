@@ -39,7 +39,7 @@ export async function isTelegramSessionAuthorized(
     const message = `${telegramError.errorMessage ?? ""} ${telegramError.message ?? ""}`;
 
     if (
-      /AUTH_KEY_(?:UNREGISTERED|INVALID|PERM_EMPTY)|SESSION_REVOKED|USER_DEACTIVATED|USER_DEACTIVATED_BAN/i.test(
+      /AUTH_KEY_(?:UNREGISTERED|INVALID|PERM_EMPTY|DUPLICATED)|SESSION_(?:REVOKED|EXPIRED)|USER_DEACTIVATED(?:_BAN)?/i.test(
         message,
       )
     ) {

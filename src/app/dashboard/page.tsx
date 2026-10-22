@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -91,6 +91,7 @@ export default function DashboardPage() {
   const [profilePhotoAvailable, setProfilePhotoAvailable] = useState(true);
   const [images, setImages] = useState<ImageItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [redirectingToLogin, setRedirectingToLogin] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -104,6 +105,11 @@ export default function DashboardPage() {
 
   const fileRef = useRef<HTMLInputElement>(null);
 
+  const redirectToLogin = useCallback(() => {
+    setRedirectingToLogin(true);
+    window.location.replace("/login");
+  }, []);
+
   // Load user and real images on mount
   useEffect(() => {
     let isMounted = true;
@@ -115,13 +121,13 @@ export default function DashboardPage() {
 
         const meRes = await fetch("/api/auth/me", { cache: "no-store" });
         if (!meRes.ok) {
-          router.replace("/login");
+          redirectToLogin();
           return;
         }
 
         const meData = await meRes.json();
         if (!meData.user) {
-          router.replace("/login");
+          redirectToLogin();
           return;
         }
 
@@ -158,27 +164,45 @@ export default function DashboardPage() {
     return () => {
       isMounted = false;
     };
-  }, [router]);
+  }, [redirectToLogin, router]);
 
   useEffect(() => {
     if (!currentUser) return;
 
-    const interval = setInterval(async () => {
+    let active = true;
+    let checking = false;
+
+    async function checkSession() {
+      if (!active || checking || document.visibilityState === "hidden") return;
+
+      checking = true;
       try {
         const response = await fetch("/api/auth/me", { cache: "no-store" });
-        if (!response.ok) return;
+        if (!response.ok || !active) return;
 
         const data = await response.json();
         if (!data.user) {
-          router.replace("/login");
+          active = false;
+          redirectToLogin();
         }
       } catch {
         // Keep the current session on temporary network errors.
+      } finally {
+        checking = false;
       }
-    }, 30_000);
+    }
 
-    return () => clearInterval(interval);
-  }, [currentUser, router]);
+    const interval = setInterval(() => void checkSession(), 30_000);
+    window.addEventListener("focus", checkSession);
+    document.addEventListener("visibilitychange", checkSession);
+
+    return () => {
+      active = false;
+      clearInterval(interval);
+      window.removeEventListener("focus", checkSession);
+      document.removeEventListener("visibilitychange", checkSession);
+    };
+  }, [currentUser, redirectToLogin]);
 
   // Real upload handler connecting to POST /api/images/upload
   async function handleUpload(files: FileList | null) {
@@ -288,6 +312,21 @@ export default function DashboardPage() {
       // ignore
     }
     router.replace("/login");
+  }
+
+  if (redirectingToLogin || (loading && !currentUser)) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-[#f7f8fc] text-slate-600">
+        <div role="status" className="flex items-center gap-3">
+          <Loader2 size={20} className="animate-spin text-indigo-600" />
+          <span>
+            {redirectingToLogin
+              ? "Your Telegram session has ended. Returning to login..."
+              : "Checking your session..."}
+          </span>
+        </div>
+      </main>
+    );
   }
 
   return (
